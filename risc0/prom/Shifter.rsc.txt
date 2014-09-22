@@ -1,0 +1,73 @@
+decode Shifter.rsc
+Shifter 66dbcdc8    0   248
+imports:
+type descriptors
+
+data    16
+strings
+
+code
+   0	 e7000007	B       7               // GOTO 8
+   1	 0	MOV  R0  R0  R0
+   2	 0	MOV  R0  R0  R0
+   3	 0	MOV  R0  R0  R0
+   4	 0	MOV  R0  R0  R0
+   5	 0	MOV  R0  R0  R0
+   6	 0	MOV  R0  R0  R0
+   7	 0	MOV  R0  R0  R0
+   8	 4d000010	MOV SB  R0     16       // Initialize data  at 0x00000010
+   9	 5e00ffc0	MOV SP  R0    -64       // Initialize stack at 0xffffffc0
+  10	 40000001	MOV  R0  R0      1      //
+  11	 a0d00008	STR   R0 SB       8     // z := 1;
+  12	 40000001	MOV  R0  R0      1      //
+  13	 a0d0000c	STR   R0 SB      12     // d := 1;
+  14	 80d00008	LDR  R0 SB       8      // REPEAT
+  15	 5100ffc4	MOV  R1  R0    -60      //
+  16	 a0100000	STR   R0  R1       0    //   LED(z);
+  17	 400003e8	MOV  R0  R0   1000      //
+  18	 a0d00000	STR   R0 SB       0     //   x := 1000;
+  19	 400003e8	MOV  R0  R0   1000      //   REPEAT
+  20	 a0d00004	STR   R0 SB       4     //     y := 1000;
+  21	 80d00004	LDR  R0 SB       4      //     REPEAT
+  22	 40090001	SUB  R0  R0      1      //
+  23	 a0d00004	STR   R0 SB       4     //       y := y - 1;
+  24	 80d00004	LDR  R0 SB       4      //
+  25	 e9fffffb	BNE       -5            //     UNTIL y = 0;
+  26	 80d00000	LDR  R0 SB       0      //
+  27	 40090001	SUB  R0  R0      1      //
+  28	 a0d00000	STR   R0 SB       0     //     x := x - 1;
+  29	 80d00000	LDR  R0 SB       0      //
+  30	 e9fffff4	BNE      -12            //   UNTIL x = 0;
+  31	 80d00008	LDR  R0 SB       8      //   IF
+  32	 40090080	SUB  R0  R0    128      //
+  33	 e9000003	BNE        3            //      z = 128 THEN
+  34	 5000ffff	MOV  R0  R0     -1      //
+  35	 a0d0000c	STR   R0 SB      12     //     d := -1;
+  36	 e7000005	B       5               //
+  37	 80d00008	LDR  R0 SB       8      //   ELSIF
+  38	 40090001	SUB  R0  R0      1      //
+  39	 e9000002	BNE        2            //     z = 1 THEN
+  40	 40000001	MOV  R0  R0      1      //
+  41	 a0d0000c	STR   R0 SB      12     //     d := 1 END;
+  42	 80d0000c	LDR  R0 SB      12      //   IF
+  43	 40090001	SUB  R0  R0      1      //
+  44	 e9000004	BNE        4            //     d = 1 THEN
+  45	 80d00008	LDR  R0 SB       8      //
+  46	 40010001	LSL  R0  R0      1      //
+  47	 a0d00008	STR   R0 SB       8     //     z := LSL(z, 1);
+  48	 e7000003	B       3               //
+  49	 80d00008	LDR  R0 SB       8      //   ELSE
+  50	 40020001	ASR  R0  R0      1      //
+  51	 a0d00008	STR   R0 SB       8     //     z : = ASR(z, 1) END
+  52	 e7ffffd9	B     -39               // UNTIL FALSE;
+  53	 40000000	MOV  R0  R0      0
+  54	 c7000000	B  R0
+commands:
+entries
+    32
+pointer refs
+
+fixP =        0
+fixD =        0
+fixT =        0
+entry =       32
